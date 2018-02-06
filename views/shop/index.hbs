@@ -1,0 +1,27 @@
+<div class="row">
+{{#each products}}
+
+
+  <div class="col-md-6 col-sm-12">
+    <div class="wrapper">
+        <div class="product-img">
+          <img src="{{this.imagePath}}" height="420" width="327">
+        </div>
+        <div class="product-info">
+          <div class="product-text">
+            <h1>{{this.title}}</h1>
+            <h2>by studio and friends</h2>
+            <p>{{this.description}}
+          </div>
+          <div class="product-price-btn">
+            <p><span>{{this.price}}</span>$</p><br><br>
+            <a href="/add-to-cart/{{this._id}}"><button type="button">buy now</button>
+          </div>
+        </div>
+    </div>
+  </div>
+
+
+
+{{/each}}
+</div>

@@ -1,0 +1,115 @@
+{{#if products}}
+
+
+  <div class="row">
+    <div class="col-md-6">
+        <ul class="list-group">
+          {{#each products}}
+          <li class="list-group-item">
+
+            <strong>{{this.item.title}}</strong>
+            <label for="" class="label label-success">{{this.price}}</label>
+            <div class="btn-group">
+              <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" name="button">Action</button>
+              <ul class="dropdown-menu">
+                <li>
+                    <a href="/reduce/{{this.item._id}}">Reduce by 1</a>
+                </li>
+                <li>
+                    <a href="/remove/{{this.item._id}}">Remove all</a>
+                </li>
+              </ul>
+            </div>
+              <span class="badge badge-secondary">{{this.qty}}</span>
+          </li>
+          {{/each}}
+        </ul>
+    </div>
+  </div>
+  <br>
+  <br>
+  <br>
+  <div class="row">
+        <div class="col-md-6 col-sm-6 col-md-offset-3 col-sm-offset-3">
+    <form  action="/checkout" id="theForm" method="post">
+        <input type="text" name="address" value="" placeholder="Shipping Address" class="form-control" >
+        <br>
+        <input type="text" name="name" value="" class="form-control" placeholder="Your Name">
+        <input type="hidden" name="payment_token" value="ABC">
+        <input type="hidden" name="razorToken" value="ABC" id="razorPayID">
+        <input type="hidden" name="totalPrice" value="{{totalPrice}}">
+        <br>
+        <br>
+        <br>
+        <div class="row">
+            <div class="col-md-6 col-sm-6 col-md-offset-3 col-sm-offset-3">
+
+              <strong>Total: {{totalPrice}}</strong>
+            </div>
+        </div>
+        <br>
+        <br>
+        <br>
+  <p><button type="submit" class="btn btn-success" id="submitCheckout">Complete Order</button></p>
+</form>
+      </div>
+  </div>
+
+  {{else}}
+  <div class="row">
+
+      <div class="col-md-6 col-sm-6 col-md-offset-3 col-sm-offset-3">
+          <strong>No Items in your cart</strong>
+      </div>
+  </div>
+
+{{/if}}
+
+
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+
+var total = parseInt({{totalPrice}});
+var form = document.getElementById('theForm');
+var submitForm = document.getElementById('submitCheckout');
+var options = {
+    "key": "rzp_test_0NecubE2Lsohnk",
+    "amount": total*100, // 2000 paise = INR 20
+    "name": "Merchant Name",
+    "description": "Purchase Description",
+    "image": "/your_logo.png",
+    "capture": "True",
+    "handler": function (response){
+
+      $('#razorPayID').val(response.razorpay_payment_id);
+        if (response) {
+
+              form.submit();
+        }else{
+
+        }
+
+    },
+    "prefill": {
+        "name": "Harshil Mathur",
+        "email": "harshil@razorpay.com"
+    },
+    "notes": {
+        "address": "Hello World"
+    },
+    "theme": {
+        "color": "#F37254"
+    }
+};
+
+
+submitForm.onclick = function(e){
+  var rzp1 = new Razorpay(options);
+
+    // document.getElementById('rzp-button1').onclick = function(e){
+        rzp1.open();
+        e.preventDefault();
+};
+
+</script>
